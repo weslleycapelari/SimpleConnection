@@ -6,12 +6,15 @@ uses
   SimpleConnection.Query.Intf,
   FireDAC.Stan.Param,
   FireDAC.Comp.Client,
-  Data.DB;
+  FireDAC.DApt,
+  Data.DB,
+  SysUtils;
 
 type
   TQueryFireDAC = class(TInterfacedObject, IQuery)
   private
-    FQuery: TFDQuery;
+    FQuery  : TFDQuery;
+    FSilence: Boolean;
     function Open: IQuery;
     function Close: IQuery;
     function Next: IQuery;
@@ -24,13 +27,13 @@ type
     function RecNo: Integer;
     function IsEmpty: Boolean;
     function IsActive: Boolean;
-    {$IF DEFINED(CON_FIREDAC)}
-    function SetConnection(const pConnection: TFDCustomConnection): IQuery;
+    function SetConnection(const pConnection: TCustomConnection): IQuery;
     function GetConnection: TCustomConnection;
-    {$ENDIF}
+    function GetDataSet: TDataSet;
     function AddSQL(const pCommand: string): IQuery;
     function ClearSQL: IQuery;
     function SetSQL(const pSQL: string): IQuery;
+    function SetSilence(const pValue: Boolean): IQuery;
     function AddParamByName(const pName, pValue: string): IQuery; overload;
     function AddParamByName(const pName: string; const pValue: Integer): IQuery; overload;
     function AddParamByName(const pName: string; const pValue: Boolean): IQuery; overload;
@@ -53,33 +56,63 @@ function TQueryFireDAC.AddParamByName(const pName: string;
   const pValue: Boolean): IQuery;
 begin
   Result := Self;
-  FQuery.ParamByName(pName).AsBoolean := pValue;
+  try
+    FQuery.ParamByName(pName).AsBoolean := pValue;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.AddParamByName(const pName: string;
   const pValue: Integer): IQuery;
 begin
   Result := Self;
-  FQuery.ParamByName(pName).AsInteger := pValue;
+  try
+    FQuery.ParamByName(pName).AsInteger := pValue;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.AddParamByName(const pName, pValue: string): IQuery;
 begin
   Result := Self;
-  FQuery.ParamByName(pName).AsString := pValue;
+  try
+    FQuery.ParamByName(pName).AsString := pValue;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.AddParamByName(const pName: string;
   const pValue: Extended): IQuery;
 begin
   Result := Self;
-  FQuery.ParamByName(pName).AsExtended := pValue;
+  try
+    FQuery.ParamByName(pName).AsExtended := pValue;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.AddSQL(const pCommand: string): IQuery;
 begin
   Result := Self;
-  FQuery.SQL.Add(pCommand);
+  try
+    FQuery.SQL.Add(pCommand);
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.Bof: Boolean;
@@ -90,18 +123,32 @@ end;
 function TQueryFireDAC.ClearSQL: IQuery;
 begin
   Result := Self;
-  FQuery.SQL.Clear;
+  try
+    FQuery.SQL.Clear;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.Close: IQuery;
 begin
   Result := Self;
-  FQuery.Close;
+  try
+    FQuery.Close;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 constructor TQueryFireDAC.Create;
 begin
   inherited;
+  FSilence := False;
+
   FQuery := TFDQuery.Create(nil);
 end;
 
@@ -139,15 +186,24 @@ end;
 function TQueryFireDAC.First: IQuery;
 begin
   Result := Self;
-  FQuery.First;
+  try
+    FQuery.First;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
-{$IF DEFINED(CON_FIREDAC)}
 function TQueryFireDAC.GetConnection: TCustomConnection;
 begin
   Result := FQuery.Connection;
 end;
-{$ENDIF}
+
+function TQueryFireDAC.GetDataSet: TDataSet;
+begin
+  Result := FQuery;
+end;
 
 function TQueryFireDAC.IsActive: Boolean;
 begin
@@ -162,7 +218,13 @@ end;
 function TQueryFireDAC.Last: IQuery;
 begin
   Result := Self;
-  FQuery.Last;
+  try
+    FQuery.Last;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 class function TQueryFireDAC.New: IQuery;
@@ -173,19 +235,37 @@ end;
 function TQueryFireDAC.Next: IQuery;
 begin
   Result := Self;
-  FQuery.Next;
+  try
+    FQuery.Next;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.Open: IQuery;
 begin
   Result := Self;
-  FQuery.Open;
+  try
+    FQuery.Open;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.Prior: IQuery;
 begin
   Result := Self;
-  FQuery.Prior;
+  try
+    FQuery.Prior;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 function TQueryFireDAC.RecNo: Integer;
@@ -198,19 +278,41 @@ begin
   Result := FQuery.RecordCount;
 end;
 
-{$IF DEFINED(CON_FIREDAC)}
 function TQueryFireDAC.SetConnection(
-  const pConnection: TFDCustomConnection): IQuery;
+  const pConnection: TCustomConnection): IQuery;
 begin
   Result := Self;
-  FQuery.Connection := pConnection;
+  try
+    FQuery.Connection := TFDCustomConnection(pConnection);
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
-{$ENDIF}
+
+function TQueryFireDAC.SetSilence(const pValue: Boolean): IQuery;
+begin
+  Result := Self;
+  try
+    FSilence := pValue;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
 
 function TQueryFireDAC.SetSQL(const pSQL: string): IQuery;
 begin
   Result := Self;
-  FQuery.SQL.Text := pSQL;
+  try
+    FQuery.SQL.Text := pSQL;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 end.

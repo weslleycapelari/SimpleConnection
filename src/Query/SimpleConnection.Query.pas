@@ -4,7 +4,15 @@ interface
 
 uses
   SimpleConnection.Query.Intf
-  {$IF DEFINED(CON_FIREDAC)}
+  {$IF DEFINED(SC_BDE)}
+
+  {$ELSEIF DEFINED(SC_ADO)}
+
+  {$ELSEIF DEFINED(SC_DBX)}
+
+  {$ELSEIF DEFINED(SC_ADO)}
+
+  {$ELSE}
   , SimpleConnection.Query.FireDAC
   {$ENDIF}
   ;
@@ -22,7 +30,15 @@ implementation
 
 class function TQuery.New: IQuery;
 begin
-  {$IF DEFINED(CON_FIREDAC)}
+  {$IF DEFINED(SC_BDE)}
+
+  {$ELSEIF DEFINED(SC_ADO)}
+
+  {$ELSEIF DEFINED(SC_DBX)}
+
+  {$ELSEIF DEFINED(SC_ADO)}
+
+  {$ELSE}
   Result := TQueryFireDAC.New;
   {$ENDIF}
 end;
