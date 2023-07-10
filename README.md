@@ -1,14 +1,14 @@
 <p align="center">
-  <a href="https://github.com/weslleycapelari/simple-connection/blob/main/img/logo.png">
-    <img alt="SimpleConnection" height="150" src="https://github.com/weslleycapelari/simple-connection/blob/main/img/logo.png">
+  <a href="https://github.com/weslleycapelari/SimpleConnection/blob/main/img/logo.png">
+    <img alt="SimpleConnection" height="150" src="https://github.com/weslleycapelari/SimpleConnection/blob/main/img/logo.png">
   </a>  
 </p><br>
 <p align="center">
   <b>SimpleConnection</b> is a library responsible for generating <b>database connections</b> and <b>queries</b> in an <b>abstract</b> and <b>simple</b> way.
 </p><br>
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/weslleycapelari/simple-connection?style=flat-square">
-  <img src="https://img.shields.io/github/stars/weslleycapelari/simple-connection?style=flat-square">
+  <img src="https://img.shields.io/github/v/release/weslleycapelari/SimpleConnection?style=flat-square">
+  <img src="https://img.shields.io/github/stars/weslleycapelari/SimpleConnection?style=flat-square">
 </p>
  
 ## ⚙️ Installation 
@@ -16,13 +16,13 @@
 * **Manual installation**: Add the following folders to your project, in *Project > Options > Resource Compiler > Directories and Conditionals > Include file search path*
 
 ```
-../simple-connection/src
+../SimpleConnection/src
 ```
 
 * Installation using the [**Boss**](https://github.com/HashLoad/boss):
 
 ```
-boss install github.com/weslleycapelari/simple-connection
+boss install github.com/weslleycapelari/SimpleConnection
 ```
 
 ## 🔰 Engines
@@ -106,4 +106,4 @@ A project was developed inside the example folder
 
 ## ⚠️ License
 
-`SimpleConnection` is free and open-source software licensed under the [Apache-2.0 License](https://github.com/weslleycapelari/simple-connection/blob/main/LICENSE). 
+`SimpleConnection` is free and open-source software licensed under the [Apache-2.0 License](https://github.com/weslleycapelari/SimpleConnection/blob/main/LICENSE). 
