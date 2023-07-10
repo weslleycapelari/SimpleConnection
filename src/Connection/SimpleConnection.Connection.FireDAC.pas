@@ -20,14 +20,22 @@ type
     FConnection: TFDConnection;
     FManager   : TFDManager;
     FSilence   : Boolean;
-    function SetDatabase(const pDatabase: string): IConnection;
-    function SetLibrary(const pLibrary: string): IConnection;
-    function SetEngine(const pEngine: string): IConnection;
-    function SetHost(const pHost: string): IConnection;
-    function SetPort(const pPort: string): IConnection;
-    function SetUser(const pUser: string): IConnection;
-    function SetPass(const pPass: string): IConnection;
-    function SetSilence(const pValue: Boolean): IConnection;
+    function Database(const pDatabase: string): IConnection; overload;
+    function Database: string; overload;
+    function VendorLib(const pLibrary: string): IConnection; overload;
+    function VendorLib: string; overload;
+    function Engine(const pEngine: string): IConnection; overload;
+    function Engine: string; overload;
+    function Hostname(const pHost: string): IConnection; overload;
+    function Hostname: string; overload;
+    function Port(const pPort: string): IConnection; overload;
+    function Port: string; overload;
+    function Username(const pUser: string): IConnection; overload;
+    function Username: string; overload;
+    function Password(const pPass: string): IConnection; overload;
+    function Password: string; overload;
+    function Silence(const pValue: Boolean): IConnection; overload;
+    function Silence: Boolean; overload;
     function ClearParams: IConnection;
     function Open: IConnection;
     function Close: IConnection;
@@ -36,7 +44,7 @@ type
     function Commit: IConnection;
     function Rollback: IConnection;
     function InTransaction: Boolean;
-    function GetConnection: TCustomConnection;
+    function Connection: TCustomConnection;
     constructor Create;
   public
     destructor Destroy; override;
@@ -93,7 +101,23 @@ begin
 
   FConnection := TFDConnection.Create(nil);
   FConnection.LoginPrompt := False;
-  SetEngine('Firebird');
+  Engine('Firebird');
+end;
+
+function TConnectionFireDAC.Database: string;
+var
+  Idx: Integer;
+begin
+  Result := '';
+  try
+    Idx := FConnection.Params.IndexOfName('Database');
+    if Idx >= 0 then
+      Result := FConnection.Params[Idx];
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
 end;
 
 destructor TConnectionFireDAC.Destroy;
@@ -102,7 +126,21 @@ begin
   inherited;
 end;
 
-function TConnectionFireDAC.GetConnection: TCustomConnection;
+function TConnectionFireDAC.Engine: string;
+begin
+  Result := '';
+  try
+    case IndexStr(FConnection.DriverName , ['FB']) of
+      0: Result := 'Firebird';
+    end;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TConnectionFireDAC.Connection: TCustomConnection;
 begin
   Result := FConnection;
 end;
@@ -146,7 +184,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetDatabase(const pDatabase: string): IConnection;
+function TConnectionFireDAC.Database(const pDatabase: string): IConnection;
 begin
   Result := Self;
   try
@@ -158,11 +196,11 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetEngine(const pEngine: string): IConnection;
+function TConnectionFireDAC.Engine(const pEngine: string): IConnection;
 begin
   Result := Self;
   try
-    case AnsiIndexText(pEngine, ['Firebird']) of
+    case IndexStr(pEngine, ['Firebird']) of
       0:
         begin
           FConnection.DriverName      := 'FB';
@@ -176,7 +214,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetHost(const pHost: string): IConnection;
+function TConnectionFireDAC.Hostname(const pHost: string): IConnection;
 begin
   Result := Self;
   try
@@ -188,7 +226,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetLibrary(const pLibrary: string): IConnection;
+function TConnectionFireDAC.VendorLib(const pLibrary: string): IConnection;
 begin
   Result := Self;
   try
@@ -200,7 +238,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetPass(const pPass: string): IConnection;
+function TConnectionFireDAC.Password(const pPass: string): IConnection;
 begin
   Result := Self;
   try
@@ -212,7 +250,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetPort(const pPort: string): IConnection;
+function TConnectionFireDAC.Port(const pPort: string): IConnection;
 begin
   Result := Self;
   try
@@ -224,7 +262,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetSilence(const pValue: Boolean): IConnection;
+function TConnectionFireDAC.Silence(const pValue: Boolean): IConnection;
 begin
   Result := Self;
   try
@@ -236,7 +274,7 @@ begin
   end;
 end;
 
-function TConnectionFireDAC.SetUser(const pUser: string): IConnection;
+function TConnectionFireDAC.Username(const pUser: string): IConnection;
 begin
   Result := Self;
   try
@@ -248,11 +286,74 @@ begin
   end;
 end;
 
+function TConnectionFireDAC.Silence: Boolean;
+begin
+  Result := FSilence;
+end;
+
 function TConnectionFireDAC.StartTransaction: IConnection;
 begin
   Result := Self;
   try
     FConnection.StartTransaction;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TConnectionFireDAC.Hostname: string;
+var
+  Idx: Integer;
+begin
+  Result := '';
+  try
+    Idx := FConnection.Params.IndexOfName('Server');
+    if Idx >= 0 then
+      Result := FConnection.Params[Idx];
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TConnectionFireDAC.Password: string;
+begin
+  Result := FConnection.Params.Password;
+end;
+
+function TConnectionFireDAC.Port: string;
+var
+  Idx: Integer;
+begin
+  Result := '';
+  try
+    Idx := FConnection.Params.IndexOfName('Port');
+    if Idx >= 0 then
+      Result := FConnection.Params[Idx];
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TConnectionFireDAC.Username: string;
+begin
+  Result := FConnection.Params.UserName;
+end;
+
+function TConnectionFireDAC.VendorLib: string;
+var
+  Idx: Integer;
+begin
+  Result := '';
+  try
+    Idx := FConnection.Params.IndexOfName('VendorLib');
+    if Idx >= 0 then
+      Result := FConnection.Params[Idx];
   except
     on E: Exception do
       if not FSilence then

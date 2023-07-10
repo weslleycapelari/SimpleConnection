@@ -16,6 +16,8 @@ type
     FQuery  : TFDQuery;
     FSilence: Boolean;
     function Open: IQuery;
+    function Execute: IQuery;
+    function ExecuteSQL(const pSQL: string): IQuery;
     function Close: IQuery;
     function Next: IQuery;
     function Prior: IQuery;
@@ -27,13 +29,15 @@ type
     function RecNo: Integer;
     function IsEmpty: Boolean;
     function IsActive: Boolean;
-    function SetConnection(const pConnection: TCustomConnection): IQuery;
-    function GetConnection: TCustomConnection;
-    function GetDataSet: TDataSet;
+    function Connection(const pConnection: TCustomConnection): IQuery; overload;
+    function Connection: TCustomConnection; overload;
+    function DataSet: TDataSet;
     function AddSQL(const pCommand: string): IQuery;
     function ClearSQL: IQuery;
-    function SetSQL(const pSQL: string): IQuery;
-    function SetSilence(const pValue: Boolean): IQuery;
+    function SQL(const pSQL: string): IQuery; overload;
+    function SQL: string; overload;
+    function Silence(const pValue: Boolean): IQuery; overload;
+    function Silence: Boolean; overload;
     function AddParamByName(const pName, pValue: string): IQuery; overload;
     function AddParamByName(const pName: string; const pValue: Integer): IQuery; overload;
     function AddParamByName(const pName: string; const pValue: Boolean): IQuery; overload;
@@ -163,6 +167,31 @@ begin
   Result := FQuery.Eof;
 end;
 
+function TQueryFireDAC.Execute: IQuery;
+begin
+  Result := Self;
+  try
+    FQuery.ExecSQL;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TQueryFireDAC.ExecuteSQL(const pSQL: string): IQuery;
+begin
+  Result := Self;
+  try
+    SQL(pSQL);
+    FQuery.ExecSQL;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
 function TQueryFireDAC.FieldAsBoolean(const pName: string): Boolean;
 begin
   Result := FQuery.FieldByName(pName).AsBoolean;
@@ -195,12 +224,12 @@ begin
   end;
 end;
 
-function TQueryFireDAC.GetConnection: TCustomConnection;
+function TQueryFireDAC.Connection: TCustomConnection;
 begin
   Result := FQuery.Connection;
 end;
 
-function TQueryFireDAC.GetDataSet: TDataSet;
+function TQueryFireDAC.DataSet: TDataSet;
 begin
   Result := FQuery;
 end;
@@ -278,7 +307,7 @@ begin
   Result := FQuery.RecordCount;
 end;
 
-function TQueryFireDAC.SetConnection(
+function TQueryFireDAC.Connection(
   const pConnection: TCustomConnection): IQuery;
 begin
   Result := Self;
@@ -291,7 +320,7 @@ begin
   end;
 end;
 
-function TQueryFireDAC.SetSilence(const pValue: Boolean): IQuery;
+function TQueryFireDAC.Silence(const pValue: Boolean): IQuery;
 begin
   Result := Self;
   try
@@ -303,11 +332,28 @@ begin
   end;
 end;
 
-function TQueryFireDAC.SetSQL(const pSQL: string): IQuery;
+function TQueryFireDAC.SQL(const pSQL: string): IQuery;
 begin
   Result := Self;
   try
     FQuery.SQL.Text := pSQL;
+  except
+    on E: Exception do
+      if not FSilence then
+        raise Exception.Create(E.Message);
+  end;
+end;
+
+function TQueryFireDAC.Silence: Boolean;
+begin
+  Result := FSilence;
+end;
+
+function TQueryFireDAC.SQL: string;
+begin
+  Result := '';
+  try
+    Result := FQuery.SQL.Text;
   except
     on E: Exception do
       if not FSilence then

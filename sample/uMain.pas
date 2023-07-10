@@ -64,14 +64,14 @@ begin
   else if LConn.IsActive then
     LConn.Close;
 
-  LConn.SetSilence(True)
-    .SetEngine(cbbDriver.Text)
-    .SetHost(edtHostname.Text)
-    .SetPort(edtPort.Text)
-    .SetDatabase(TPath.GetFullPath(edtDatabase.Text))
-    .SetUser(edtUsername.Text)
-    .SetPass(edtPassword.Text)
-    .SetLibrary(edtLibrary.Text);
+  LConn.Silence(True)
+    .Engine(cbbDriver.Text)
+    .Hostname(edtHostname.Text)
+    .Port(edtPort.Text)
+    .Database(TPath.GetFullPath(edtDatabase.Text))
+    .Username(edtUsername.Text)
+    .Password(edtPassword.Text)
+    .VendorLib(edtLibrary.Text);
 
   mmoResult.Color      := clPastelBlue;
   mmoResult.Lines.Text := 'Tentando conexão com os parâmetros acima...';
@@ -108,9 +108,9 @@ begin
   if LConn.IsActive then
   begin
     LQuery := TQuery.New
-      .SetSilence(False)
-      .SetConnection(LConn.GetConnection)
-      .SetSQL('select * from customer');
+      .Silence(False)
+      .Connection(LConn.Connection)
+      .SQL('select * from customer');
 
     try
       LQuery.Open;
@@ -121,7 +121,7 @@ begin
         mmoResult.Lines.Text := 'Consulta realizada com sucesso.';
 
         Application.CreateForm(TFrmDataGrid, FrmDataGrid);
-        FrmDataGrid.dsData.DataSet := LQuery.GetDataSet;
+        FrmDataGrid.dsData.DataSet := LQuery.DataSet;
         FrmDataGrid.ShowModal;
         FreeAndNil(FrmDataGrid);
       end

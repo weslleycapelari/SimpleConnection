@@ -31,9 +31,6 @@ object FrmMain: TFrmMain
       Caption = 'Connect'
       TabOrder = 0
       OnClick = btnConnectClick
-      ExplicitLeft = 80
-      ExplicitTop = 18
-      ExplicitHeight = 25
     end
     object btnQuery: TButton
       AlignWithMargins = True
@@ -45,7 +42,6 @@ object FrmMain: TFrmMain
       Caption = 'Query'
       TabOrder = 1
       OnClick = btnQueryClick
-      ExplicitTop = 2
     end
   end
   object pnlCorpo: TPanel
@@ -55,9 +51,6 @@ object FrmMain: TFrmMain
     Height = 278
     Align = alClient
     TabOrder = 1
-    ExplicitTop = -2
-    ExplicitWidth = 561
-    ExplicitHeight = 184
     object pnlFields1: TPanel
       Left = 1
       Top = 1
@@ -66,7 +59,6 @@ object FrmMain: TFrmMain
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 559
       object lblDriver: TLabel
         AlignWithMargins = True
         Left = 3
@@ -92,8 +84,6 @@ object FrmMain: TFrmMain
         Items.Strings = (
           'Firebird'
           'MySQL')
-        ExplicitLeft = 45
-        ExplicitWidth = 383
       end
     end
     object pnlFields2: TPanel
@@ -104,8 +94,6 @@ object FrmMain: TFrmMain
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitTop = 97
-      ExplicitWidth = 559
       object lblHostname: TLabel
         AlignWithMargins = True
         Left = 3
@@ -126,7 +114,6 @@ object FrmMain: TFrmMain
         Align = alRight
         Caption = 'Port'
         Layout = tlCenter
-        ExplicitLeft = 350
         ExplicitHeight = 15
       end
       object edtHostname: TEdit
@@ -138,8 +125,6 @@ object FrmMain: TFrmMain
         Align = alClient
         TabOrder = 0
         Text = 'localhost'
-        ExplicitLeft = 66
-        ExplicitWidth = 275
         ExplicitHeight = 23
       end
       object edtPort: TEdit
@@ -162,8 +147,6 @@ object FrmMain: TFrmMain
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitLeft = 4
-      ExplicitTop = 88
       object lblDatabase: TLabel
         AlignWithMargins = True
         Left = 3
@@ -184,8 +167,6 @@ object FrmMain: TFrmMain
         Align = alClient
         TabOrder = 0
         Text = '../../database/examples.fdb'
-        ExplicitLeft = 63
-        ExplicitWidth = 365
         ExplicitHeight = 23
       end
     end
@@ -197,8 +178,6 @@ object FrmMain: TFrmMain
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 3
-      ExplicitLeft = -2
-      ExplicitTop = 115
       object lblUsername: TLabel
         AlignWithMargins = True
         Left = 3
@@ -220,7 +199,6 @@ object FrmMain: TFrmMain
         Align = alRight
         Caption = 'Password'
         Layout = tlCenter
-        ExplicitLeft = 324
         ExplicitHeight = 15
       end
       object edtUsername: TEdit
@@ -232,7 +210,7 @@ object FrmMain: TFrmMain
         Align = alClient
         TabOrder = 0
         Text = 'SYSDBA'
-        ExplicitLeft = 68
+        ExplicitHeight = 23
       end
       object edtPassword: TEdit
         AlignWithMargins = True
@@ -244,6 +222,7 @@ object FrmMain: TFrmMain
         PasswordChar = '*'
         TabOrder = 1
         Text = 'masterkey'
+        ExplicitHeight = 23
       end
     end
     object pnlFields31: TPanel
@@ -254,8 +233,6 @@ object FrmMain: TFrmMain
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 4
-      ExplicitLeft = 4
-      ExplicitTop = 183
       object lblLibrary: TLabel
         AlignWithMargins = True
         Left = 3
@@ -276,7 +253,7 @@ object FrmMain: TFrmMain
         Align = alClient
         TabOrder = 0
         Text = 'fbclient.dll'
-        ExplicitTop = 19
+        ExplicitHeight = 23
       end
     end
     object mmoResult: TMemo

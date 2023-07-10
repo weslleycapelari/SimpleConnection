@@ -44,14 +44,14 @@ var
   LConn: IConnection;
 begin
   LConn := TConnection.New
-    .SetSilence(True)
-    .SetEngine('Firebird')
-    .SetHost('localhost')
-    .SetPort('3050')
-    .SetDatabase('database.fdb')
-    .SetUser('SYSDBA')
-    .SetPass('masterkey')
-    .SetLibrary('fbclient.dll')
+    .Silence(True)
+    .Engine('Firebird')
+    .Hostname('localhost')
+    .Port('3050')
+    .Database('database.fdb')
+    .Username('SYSDBA')
+    .Password('masterkey')
+    .VendorLib('fbclient.dll')
     .Open;
 
   if LConn.IsActive then
@@ -65,14 +65,26 @@ end;
 
 ```pascal
 var
+  LConn : IConnection;
   LQuery: IQuery;
 begin
+  LConn := TConnection.New
+    .Silence(True)
+    .Engine('Firebird')
+    .Hostname('localhost')
+    .Port('3050')
+    .Database('database.fdb')
+    .Username('SYSDBA')
+    .Password('masterkey')
+    .VendorLib('fbclient.dll')
+    .Open;
+
   if LConn.IsActive then
   begin
     LQuery := TQuery.New
-      .SetSilence(False)
-      .SetConnection(LConn.GetConnection)
-      .SetSQL('select * from customer')
+      .Silence(True)
+      .Connection(LConn.Connection)
+      .SQL('select * from customer')
       .Open;
 
     while not LQuery.Eof do
