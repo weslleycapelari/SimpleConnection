@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/weslleycapelari/simple-connection/blob/master/img/logo.png">
-    <img alt="SimpleConnection" height="150" src="https://github.com/weslleycapelari/simple-connection/blob/master/img/logo.png">
+  <a href="https://github.com/weslleycapelari/simple-connection/blob/main/img/logo.png">
+    <img alt="SimpleConnection" height="150" src="https://github.com/weslleycapelari/simple-connection/blob/main/img/logo.png">
   </a>  
 </p><br>
 <p align="center">
@@ -106,4 +106,4 @@ A project was developed inside the example folder
 
 ## ⚠️ License
 
-`SimpleConnection` is free and open-source software licensed under the [Apache-2.0 License](https://github.com/weslleycapelari/simple-connection/blob/master/LICENSE). 
+`SimpleConnection` is free and open-source software licensed under the [Apache-2.0 License](https://github.com/weslleycapelari/simple-connection/blob/main/LICENSE). 
